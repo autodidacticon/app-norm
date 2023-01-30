@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: application_size_distribution_by_category
+    description: "Distribution of application sizes by category"
+    columns:
+      - name: cat_norm
+        description: "Normalized category"
+        tests:
+          - accepted_values:
+              values: ["GAME", "HEALTH", "MUSIC"]
+      - name: app_sz_mb_1000
+        description: "Application size rounded to the nearest 1000 MB"
+      - name: bucket_count
+        description: "Number of applications within bucket"
+  - name: avg_rating_by_category
+    description: "Average user rate by category"
+    columns:
+      - name: cat_norm
+        description: "Normalized category"
+        tests:
+          - accepted_values:
+              values: ["GAME", "HEALTH", "MUSIC"]
+      - name: rating_avg
+        description: "Average rating of applications within a given category"
+  - name: new_releases_by_month_and_category
+    description: "Number of new releases per month by category"
+    columns:
+      - name: cat_norm
+        description: "Normalized category"
+        tests:
+          - accepted_values:
+              values: ["GAME", "HEALTH", "MUSIC"]
+      - name: release_year
+        tests:
+          - dbt_utils.sequential_values:
+              interval: 1
+              group_by_columns: ['cat_norm', 'release_month']
+      - name: release_month
+        tests:
+          - dbt_utils.sequential_values:
+              interval: 1
+              group_by_columns: ['cat_norm', 'release_year']
+
+  - name: top_10_largest_apps_by_category
+    description: "Top 10 largest applications by size per category"
+    columns:
+      - name: cat_norm
+        description: "Normalized category"
+        tests:
+          - accepted_values:
+              values: ["GAME", "HEALTH", "MUSIC"]
+      - name: release_year
+        tests:
+          - dbt_utils.sequential_values:
+              interval: 1
+              group_by_columns: ['cat_norm', 'rn']
+      - name: rn
+        tests:
+          - dbt_utils.sequential_values:
+              interval: 1
+              group_by_columns: ['cat_norm', 'release_year']
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 10
+              inclusive: true
+
+

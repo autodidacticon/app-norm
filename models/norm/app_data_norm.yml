@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: app_data_norm
+    description: "Combined data from play_store_data_norm and app_store_data_norm"
+    columns:
+      - name: app_name
+        description: "Application Name"
+      - name: app_sz_mb
+        description: "Application size in MB"
+      - name: app_sz_bytes
+        description: "Application size in bytes"
+      - name: avg_review_score
+        description: "Average review score"
+      - name: review_count
+        description: "Number of reviews"
+      - name: release_date
+        description: "Date of release"
+      - name: cat_norm
+        description: "Normalized category"
+        tests:
+          - accepted_values:
+              values: ["GAME", "HEALTH", "MUSIC"]
+  - name: play_store_data_norm
+    description: "Normalized google play store data"
+  - name: app_store_data_norm
+    description: "Normalized apple app store data"
